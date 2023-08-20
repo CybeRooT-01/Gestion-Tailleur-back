@@ -30,3 +30,7 @@ Route::delete('/categories/delete/', [CategorieController::class, 'destroy'])->n
 Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
 
 Route::get("/fournisseur", [FournisseurController::class, "index"])->name("fournisseur.index");
+
+Route::get("/articleFournisseurCategorie", [ArticleController::class, "getCategoryFournisseurArticle"])->name("articleFournisseurCategorie.index");
+
+Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');

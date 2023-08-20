@@ -29,7 +29,8 @@ class CategorieController extends Controller
         if ($existingDeletedCategorie) {
             $existingDeletedCategorie->restore();
             return response()->json([
-                'message' => 'Catégorie restaurée avec succès'
+                'message' => 'Catégorie restaurée avec succès',
+                'lastAdded' => $existingDeletedCategorie
             ], Response::HTTP_OK);
         }
         $existingCategorie = Categorie::where('libelle', $categorieName)->first();
@@ -43,7 +44,9 @@ class CategorieController extends Controller
         ]);
     
         return response()->json([
-            'message' => 'Catégorie créée avec succès'
+            'message' => 'Catégorie créée avec succès',
+            'lastAdded' => Categorie::latest()->first()
+
         ], Response::HTTP_CREATED);
     }
     

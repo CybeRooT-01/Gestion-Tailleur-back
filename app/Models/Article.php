@@ -22,4 +22,21 @@ class Article extends Model
         'deleted_at',
         'reference'
     ];
+    public function categorie()
+    {
+        return $this->belongsTo(Categorie::class, 'categorie_id');
+    }
+
+    // protected static function booted()
+    // {
+    //     static::created(function ($article) {
+    //         $categori = $article->categorie_id;
+    //         $existingArticleNbr = $categori->articles->count();
+    //         if ($existingArticleNbr > 1){
+    //             $categori->increment('ordre_insertion');
+    //         }else{
+    //             $categori->update(['ordre_insertion' => 1]);
+    //         }
+    //     });
+    // }
 }
