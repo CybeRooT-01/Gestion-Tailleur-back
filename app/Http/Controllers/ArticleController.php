@@ -15,6 +15,7 @@ class ArticleController extends Controller
     public function getCategoryFournisseurArticle()
     {
         $articles = Article::with('categorie')->get();
+            
         $categories = Categorie::all();
         $fournisseurs = Fournisseur::all();
 
@@ -81,6 +82,53 @@ class ArticleController extends Controller
         Article::destroy($id);
         return response()->json([
             'message' => 'Article supprimé avec succès'
+        ], JsonResponse::HTTP_OK);
+    }
+    public function update(ArticlePostRequest $request, string $id){
+        $article = Article::where('id', $id)->first();
+        $articleFournisseur = ArticleFournisseur::where('article_id', $id)->get();
+        if (!$article) {
+            return response()->json([
+                'message' => 'Article non trouvé'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        }
+        try {
+            DB::beginTransaction();
+            $libelle = $request->libelle;
+            $prix = $request->prix;
+            $stock = $request->stock;
+            $image = $request->image;
+            $reference = $request->reference;
+            $categorie = $request->categorie;
+            $fournisseurs = $request->fournisseur;
+
+            $article->update([
+                'libelle' => $libelle,
+                'prix' => $prix,
+                'stock' => $stock,
+                'image' => $image,
+                'reference' => $reference,
+                'categorie_id' => $categorie,
+            ]);
+            foreach ($articleFournisseur as $fournisseur) {
+                $fournisseur->delete();
+            }
+            foreach ($fournisseurs as $fournisseur) {
+                ArticleFournisseur::create([
+                    'article_id' => $article->id,
+                    'fournisseur_id' => $fournisseur
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Une erreur est survenue lors de la modification de l\'article',
+                'error' => $th->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return response()->json([
+            'message' => 'Article modifié avec succès'
         ], JsonResponse::HTTP_OK);
     }
 }

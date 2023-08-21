@@ -34,3 +34,5 @@ Route::get("/fournisseur", [FournisseurController::class, "index"])->name("fourn
 Route::get("/articleFournisseurCategorie", [ArticleController::class, "getCategoryFournisseurArticle"])->name("articleFournisseurCategorie.index");
 
 Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+
+Route::match(['put', 'patch'], '/article/{id}', [ArticleController::class, 'update'])->name("articles.update");

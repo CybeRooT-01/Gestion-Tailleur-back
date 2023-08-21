@@ -22,6 +22,9 @@ class Article extends Model
         'deleted_at',
         'reference'
     ];
+    protected $hidden = [
+        'image'
+        ];
     public function categorie()
     {
         return $this->belongsTo(Categorie::class, 'categorie_id');
