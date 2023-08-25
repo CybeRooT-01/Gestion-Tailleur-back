@@ -22,7 +22,8 @@ class CategoriePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'libelle' => 'required|string|min:3'
+            'libelle' => 'required|string|min:3',
+            'type_categorie' => 'required'
         ];
     }
     public function messages(): array
@@ -31,6 +32,7 @@ class CategoriePostRequest extends FormRequest
             'libelle.required' => 'Le libelle est obligatoire',
             'libelle.string' => 'Le libelle doit être une chaine de caractères',
             'libelle.min' => 'Le libelle doit contenir au moins 3 caractères',
+            'type_categorie.required' => 'Le type de catégorie est obligatoire'
         ];
     }
 }

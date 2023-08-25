@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ArticleVenteController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\FournisseurController;
 
@@ -32,7 +33,9 @@ Route::post('/articles', [ArticleController::class, 'store'])->name('articles.st
 Route::get("/fournisseur", [FournisseurController::class, "index"])->name("fournisseur.index");
 
 Route::get("/articleFournisseurCategorie", [ArticleController::class, "getCategoryFournisseurArticle"])->name("articleFournisseurCategorie.index");
-
 Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-
 Route::match(['put', 'patch'], '/article/{id}', [ArticleController::class, 'update'])->name("articles.update");
+
+// routes article de vente
+Route::get("/articleVente", [ArticleVenteController::class, "index"])->name("articleVente.index");
+Route::post("/articleVente", [ArticleVenteController::class, "store"])->name("articleVente.store");

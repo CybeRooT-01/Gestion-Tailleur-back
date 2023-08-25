@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('articles', function (Blueprint $table) {
-
-            // $table->softDeletes();
-            //
+        Schema::table('article_ventes', function (Blueprint $table) {
+            $table->longText('image')->after('quantite_stock');
         });
     }
 
@@ -23,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('articles', function (Blueprint $table) {
-            //
+        Schema::table('article_ventes', function (Blueprint $table) {
+            $table->dropColumn('image');
         });
     }
 };

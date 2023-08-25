@@ -25,6 +25,8 @@ class CategorieController extends Controller
     public function store(CategoriePostRequest $request)
     {
         $categorieName = $request->input('libelle');
+        $typeCategorie = $request->input('type_categorie');
+
         $existingDeletedCategorie = Categorie::onlyTrashed()->where('libelle', $categorieName)->first();
         if ($existingDeletedCategorie) {
             $existingDeletedCategorie->restore();
@@ -40,7 +42,8 @@ class CategorieController extends Controller
             ], Response::HTTP_CONFLICT);
         }
         Categorie::create([
-            'libelle' => $categorieName
+            'libelle' => $categorieName,
+            'type_categorie' => $typeCategorie
         ]);
     
         return response()->json([

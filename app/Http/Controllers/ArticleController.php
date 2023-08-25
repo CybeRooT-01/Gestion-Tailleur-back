@@ -14,9 +14,15 @@ class ArticleController extends Controller
 {
     public function getCategoryFournisseurArticle()
     {
-        $articles = Article::with('categorie')->get();
+        $articles = Article::with('categorie')->with('fournisseurs')->get();
+            /*
+            j'ai une table article qui a: id, libelle, prix, stock, image, categorie_id,reference, created_at, updated_at, deleted_at
+            et une table d'association article_fournisseur qui a: id, article_id, fournisseur_id, created_at, updated_at, deleted_at
+            et une table categorie qui a: id, libelle, created_at, updated_at, deleted_at
+            comment je peux faire pour avoir les fournisseurs d'un article? sans pour autant ecrir DB::Table?
+            */
             
-        $categories = Categorie::all();
+        $categories = Categorie::where('type_categorie', 'vente')->get();
         $fournisseurs = Fournisseur::all();
 
         $data = [
@@ -24,6 +30,7 @@ class ArticleController extends Controller
             'categories' => $categories,
             'fournisseurs' => $fournisseurs
         ];
+        // dd($data);
 
         return response()->json($data, JsonResponse::HTTP_OK);
     }
@@ -53,16 +60,18 @@ class ArticleController extends Controller
                 'reference' => $reference,
                 'categorie_id' => $categorie,
             ]);
+            $ListeFournisseur = [];
             foreach ($fournisseurs as $fournisseur) {
-                ArticleFournisseur::create([
+                $ListeFournisseur[] = [
                     'article_id' => $article->id,
                     'fournisseur_id' => $fournisseur
-                ]);
+                ];
             }
+            ArticleFournisseur::insert($ListeFournisseur);
             DB::commit();
             return response()->json([
-                'message' => 'Article créé avec succès',
-                'lastAdded' => Article::latest()->first()
+                'id' => $article->id,
+                'article' => $article,
             ], JsonResponse::HTTP_CREATED);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -113,12 +122,15 @@ class ArticleController extends Controller
             foreach ($articleFournisseur as $fournisseur) {
                 $fournisseur->delete();
             }
+            $listeFournisseurs = [];
             foreach ($fournisseurs as $fournisseur) {
-                ArticleFournisseur::create([
+                $listeFournisseurs[] = [
                     'article_id' => $article->id,
                     'fournisseur_id' => $fournisseur
-                ]);
+                ];
             }
+            ArticleFournisseur::insert($listeFournisseurs);
+            
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();

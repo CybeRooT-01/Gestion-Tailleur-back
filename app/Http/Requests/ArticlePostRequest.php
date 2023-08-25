@@ -40,7 +40,7 @@ class ArticlePostRequest extends FormRequest
             'stock.numeric' => 'Le stock doit être un nombre',
             'image.required' => 'L\'image est obligatoire',
             'image.string' => 'L\'image doit être une chaine de caractères',
-            'reference.required'=>'La reference est obligatoire'
+            'reference.required'=>'La reference est obligatoire',
         ];
     }
 }

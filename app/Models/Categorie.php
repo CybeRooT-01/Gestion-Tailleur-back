@@ -12,7 +12,7 @@ class Categorie extends Model
     use SoftDeletes;
     protected $fillable = [
         'libelle',
-        'etat'
+        'type_categorie'
     ];
     protected $hidden = [
         'created_at',

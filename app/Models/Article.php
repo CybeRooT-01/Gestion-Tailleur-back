@@ -22,13 +22,16 @@ class Article extends Model
         'deleted_at',
         'reference'
     ];
-    protected $hidden = [
-        'image'
-        ];
+
     public function categorie()
     {
         return $this->belongsTo(Categorie::class, 'categorie_id');
     }
+    public function fournisseurs()
+    {
+        return $this->belongsToMany(Fournisseur::class, 'article_fournisseurs');
+    }
+    
 
     // protected static function booted()
     // {
