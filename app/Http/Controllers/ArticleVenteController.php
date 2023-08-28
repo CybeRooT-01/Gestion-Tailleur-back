@@ -8,6 +8,7 @@ use App\Models\ArticleVente;
 use App\Models\VenteConf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ArticleVenteController extends Controller
 {
@@ -16,11 +17,13 @@ class ArticleVenteController extends Controller
      */
     public function index()
     {
-        $articles = ArticleVente::all();
-
+        $articles = ArticleVente::with('venteConf')->get();
         return articleventeRessource::collection($articles);
-        
+
+
+
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -53,8 +56,8 @@ class ArticleVenteController extends Controller
                 $ListeArticle[] = [
                     'article_conf_id' => $article['id'],
                     'article_vente_id' => $articlevente->id,
+                    'quantite' => $article['quantite'],
                 ];
-
             }
             VenteConf::insert($ListeArticle);
             DB::commit();
@@ -63,7 +66,6 @@ class ArticleVenteController extends Controller
             DB::rollback();
             return response()->json(['error' => $th->getMessage()], 500);
         }
-
     }
 
     /**
@@ -85,8 +87,16 @@ class ArticleVenteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        if(!ArticleVente::find($id)){
+            return response()->json([
+                'message' => 'Article non trouvé'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        }
+        ArticleVente::destroy($id);
+        return response()->json([
+            'message' => 'Article supprimé avec succès'
+        ], JsonResponse::HTTP_OK);
     }
 }

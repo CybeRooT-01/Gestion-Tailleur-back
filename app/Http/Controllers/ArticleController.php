@@ -12,10 +12,13 @@ use App\Models\Fournisseur;
 
 class ArticleController extends Controller
 {
+    public function getCategoriesConf(){
+        $categories = Categorie::where('type_categorie', 'confection')->get();
+        return response()->json($categories, JsonResponse::HTTP_OK);
+    }
     public function getCategoryFournisseurArticle()
     {
         $articles = Article::with('categorie')->with('fournisseurs')->get();
-            
         $categories = Categorie::where('type_categorie', 'vente')->get();
         $fournisseurs = Fournisseur::all();
 

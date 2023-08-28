@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class VenteConf extends Model
 {
     use HasFactory;
+
+    
 }

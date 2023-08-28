@@ -22,6 +22,7 @@ class Article extends Model
         'deleted_at',
         'reference'
     ];
+   
 
     public function categorie()
     {
@@ -31,7 +32,7 @@ class Article extends Model
     {
         return $this->belongsToMany(Fournisseur::class, 'article_fournisseurs');
     }
-    
+
 
     // protected static function booted()
     // {

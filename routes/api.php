@@ -37,8 +37,9 @@ Route::get("/fournisseur", [FournisseurController::class, "index"])->name("fourn
 Route::get("/articleFournisseurCategorie", [ArticleController::class, "getCategoryFournisseurArticle"])->name("articleFournisseurCategorie.index");
 Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
 Route::match(['put', 'patch'], '/article/{id}', [ArticleController::class, 'update'])->name("articles.update");
-
+Route::get('/categoriesConf', [ArticleController::class, 'getCategoriesConf'])->name('categoriesConf.index');
 // routes article de vente
 Route::get("/categorieVente", [CategorieController::class, "getCategorieVente"])->name("categorieVente.index");
 Route::get("/articlesVente", [ArticleVenteController::class, "index"])->name("articleVente.index");
 Route::post("/articlesVente", [ArticleVenteController::class, "store"])->name("articleVente.store");
+Route::delete("/articlesVente", [ArticleVenteController::class, "destroy"])->name("articleVente.destroy");

@@ -22,9 +22,10 @@ class ArticleVente extends Model
     {
         return $this->belongsTo(Categorie::class);
     }
+
     public function venteConf()
     {
-        return $this->belongsToMany(VenteConf::class);
+        return $this->belongsToMany(Article::class, 'vente_confs', 'article_vente_id', 'article_conf_id')->withPivot('quantite');
     }
 
 }
