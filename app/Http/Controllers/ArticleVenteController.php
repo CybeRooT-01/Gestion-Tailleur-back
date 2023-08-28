@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\articleVenteRequest;
 use App\Http\Resources\articleventeRessource;
 use App\Models\ArticleVente;
+use App\Models\VenteConf;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\DB;
 
 class ArticleVenteController extends Controller
 {
@@ -16,12 +17,9 @@ class ArticleVenteController extends Controller
     public function index()
     {
         $articles = ArticleVente::all();
-        $message = 'Liste des articles de vente récupérée avec succès.';
 
-        return response()->json([
-            'message' => $message,
-            'data' => articleventeRessource::collection($articles),
-        ], HttpResponse::HTTP_OK);
+        return articleventeRessource::collection($articles);
+        
     }
 
     /**
@@ -29,25 +27,43 @@ class ArticleVenteController extends Controller
      */
     public function store(articleVenteRequest $request)
     {
-        $article = new ArticleVente();
-        $article->libelle = $request->libelle;
-        $article->categorie = $request->categorie;
-        $article->reference = $request->reference;
-        $article->quantite = $request->quantite;
-        $article->valeur_promo = $request->valeur_promo;
-        $article->cout_fabrication = $request->cout_fabrication;
-        $article->prix_vente = $request->prix_vente;
-        $article->marge = $request->marge;
-        $article->article_confection_id = $request->article_confection_id;
-        $article->quantite_stock = $request->quantite_stock;
-        $article->image = $request->image;
-        $article->save();
-        $message = 'Article de vente ajouté avec succès.';
+        try {
+            DB::beginTransaction();
+            $libelle = $request->libelle;
+            $image = $request->image;
+            $categorie = $request->categorie;
+            $cout_Fabrication = $request->cout_fabrication;
+            $marge = $request->marge;
+            $prix_vente = $request->prix_vente;
+            $promo = $request->promo;
+            $reference = $request->reference;
+            $articles = $request->article;
+            $articlevente = ArticleVente::create([
+                'libelle' => $libelle,
+                'image' => $image,
+                'categorie_id' => $categorie,
+                'cout_fabrication' => $cout_Fabrication,
+                'marge' => $marge,
+                'prix_vente' => $prix_vente,
+                'promo' => $promo,
+                'reference' => $reference,
+            ]);
+            $ListeArticle = [];
+            foreach ($articles as $article) {
+                $ListeArticle[] = [
+                    'article_conf_id' => $article['id'],
+                    'article_vente_id' => $articlevente->id,
+                ];
 
-        return response()->json([
-            'message' => $message,
-            'data' => new articleventeRessource($article),
-        ], HttpResponse::HTTP_CREATED);
+            }
+            VenteConf::insert($ListeArticle);
+            DB::commit();
+            return response()->json(['message' => 'Article de vente enregistré avec succès'], 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+
     }
 
     /**
@@ -61,34 +77,9 @@ class ArticleVenteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(articleVenteRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
-        $article = ArticleVente::find($id);
-        if (!$article) {
-            $message = 'Article de vente non trouvé.';
-
-            return response()->json([
-                'message' => $message,
-            ], HttpResponse::HTTP_NOT_FOUND);
-        }
-        $article->libelle = $request->libelle;
-        $article->categorie = $request->categorie;
-        $article->reference = $request->reference;
-        $article->quantite = $request->quantite;
-        $article->valeur_promo = $request->valeur_promo;
-        $article->cout_fabrication = $request->cout_fabrication;
-        $article->prix_vente = $request->prix_vente;
-        $article->marge = $request->marge;
-        $article->article_confection_id = $request->article_confection_id;
-        $article->quantite_stock = $request->quantite_stock;
-        $article->image = $request->image;
-        $article->save();
-        $message = 'Article de vente modifié avec succès.';
-
-        return response()->json([
-            'message' => $message,
-            'data' => new articleventeRessource($article),
-        ], HttpResponse::HTTP_OK);
+        //
     }
 
     /**
@@ -96,19 +87,6 @@ class ArticleVenteController extends Controller
      */
     public function destroy(string $id)
     {
-        $article = ArticleVente::find($id);
-        if (!$article) {
-            $message = 'Article de vente non trouvé.';
-
-            return response()->json([
-                'message' => $message,
-            ], HttpResponse::HTTP_NOT_FOUND);
-        }
-        $article->delete();
-        $message = 'Article de vente supprimé avec succès.';
-
-        return response()->json([
-            'message' => $message,
-        ], HttpResponse::HTTP_OK);
+        //
     }
 }

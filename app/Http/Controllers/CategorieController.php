@@ -18,6 +18,10 @@ class CategorieController extends Controller
         $categories = Categorie::all();
         return $categories;
     }
+    public function getCategorieVente(){
+        $categories = Categorie::where('type_categorie', 'vente')->get();
+        return $categories;
+    }
     
     /**
      * Store a newly created resource in storage.

@@ -16,19 +16,16 @@ class articleventeRessource extends JsonResource
     {
         // return parent::toArray($request);
         return [
-            
+
             'id' => $this->id,
             'libelle' => $this->libelle,
-            'categorie' => $this->categorie,
-            'reference' => $this->reference,
-            'quantite' => $this->quantite,
-            'valeur_promo' => $this->valeur_promo,
-            'cout_fabrication' => $this->cout_fabrication,
-            'prix_vente' => $this->prix_vente,
-            'marge' => $this->marge,
-            'article_confection_id' => $this->article_confection_id,
-            'quantite_stock' => $this->quantite_stock,
             'image' => $this->image,
+            'marge'=>$this->marge,
+            'prix_vente'=>$this->prix_vente,
+            'reference'=>$this->reference,
+            'cout_fabrication'=>$this->cout_fabrication,
+            'promo'=>$this->promo,
+            'categorie'=>$this->categorie->libelle,
         ];
     }
 }

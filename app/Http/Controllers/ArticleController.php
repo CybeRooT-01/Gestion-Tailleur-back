@@ -15,12 +15,6 @@ class ArticleController extends Controller
     public function getCategoryFournisseurArticle()
     {
         $articles = Article::with('categorie')->with('fournisseurs')->get();
-            /*
-            j'ai une table article qui a: id, libelle, prix, stock, image, categorie_id,reference, created_at, updated_at, deleted_at
-            et une table d'association article_fournisseur qui a: id, article_id, fournisseur_id, created_at, updated_at, deleted_at
-            et une table categorie qui a: id, libelle, created_at, updated_at, deleted_at
-            comment je peux faire pour avoir les fournisseurs d'un article? sans pour autant ecrir DB::Table?
-            */
             
         $categories = Categorie::where('type_categorie', 'vente')->get();
         $fournisseurs = Fournisseur::all();
@@ -40,6 +34,7 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function store(ArticlePostRequest $request)
     {
         try {

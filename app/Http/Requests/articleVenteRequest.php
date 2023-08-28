@@ -22,33 +22,22 @@ class articleVenteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'libelle' => 'required|string',
-            'categorie' => 'required|string',
-            'reference' => 'required|string',
-            'quantite' => 'required|integer',
-            'valeur_promo' => 'required|integer',
-            'cout_fabrication' => 'required|integer',
-            'prix_vente' => 'required|integer',
-            'marge' => 'required|integer',
-            'article_confection_id' => 'required|integer',
-            'quantite_stock' => 'required|integer',
+            'libelle' => 'required|string|unique:article_ventes',
             'image' => 'required|string',
+            'categorie' => 'required|integer',
         ];
     }
     public function messages(): array
     {
         return [
             'libelle.required' => 'Le libelle est obligatoire',
-            'categorie.required' => 'La categorie est obligatoire',
-            'reference.required' => 'La reference est obligatoire',
-            'quantite.required' => 'La quantite est obligatoire',
-            'valeur_promo.required' => 'La valeur promo est obligatoire',
-            'cout_fabrication.required' => 'Le cout de fabrication est obligatoire',
-            'prix_vente.required' => 'Le prix de vente est obligatoire',
-            'marge.required' => 'La marge est obligatoire',
-            'article_confection_id.required' => 'L\'article de confection est obligatoire',
-            'quantite_stock.required' => 'La quantite en stock est obligatoire',
+            'libelle.string' => 'Le libelle doit être une chaine de caractère',
+            'libelle.unique' => 'Le libelle doit être unique',
             'image.required' => 'L\'image est obligatoire',
+            'image.string' => 'L\'image doit être une chaine de caractère',
+            'categorie.required' => 'La categorie est obligatoire',
+            'categorie.integer' => 'La categorie doit être un entier',
         ];
     }
+
 }
