@@ -19,7 +19,7 @@ class articleventeRessource extends JsonResource
 
             'id' => $this->id,
             'libelle' => $this->libelle,
-            // 'image' => $this->image,
+            'image' => $this->image,
             'marge'=>$this->marge,
             'prix_vente'=>$this->prix_vente,
             'reference'=>$this->reference,

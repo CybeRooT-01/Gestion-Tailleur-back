@@ -19,9 +19,6 @@ class ArticleVenteController extends Controller
     {
         $articles = ArticleVente::with('venteConf')->get();
         return articleventeRessource::collection($articles);
-
-
-
     }
 
 
@@ -71,9 +68,15 @@ class ArticleVenteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $article = ArticleVente::with('venteConf')->find($id);
+        if (!$article) {
+            return response()->json([
+                'message' => 'Article non trouvé'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        }
+        return new articleventeRessource($article);
     }
 
     /**
@@ -81,7 +84,32 @@ class ArticleVenteController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $article = ArticleVente::find($id);
+            if (!$article) {
+                return response()->json([
+                    'message' => 'Article non trouvé'
+                ], JsonResponse::HTTP_NOT_FOUND);
+            }
+            $article->update($request->all());
+            $article->venteConf()->detach();
+            $articles = $request->article;
+            $ListeArticle = [];
+            foreach ($articles as $article) {
+                $ListeArticle[] = [
+                    'article_conf_id' => $article['id'],
+                    'article_vente_id' => $id, 
+                    'quantite' => $article['quantite'],
+                ];
+            }
+            VenteConf::insert($ListeArticle);
+            DB::commit();
+            return response()->json(['message' => 'Article de vente modifié avec succès'], 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
     /**

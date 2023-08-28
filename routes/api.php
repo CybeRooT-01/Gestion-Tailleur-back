@@ -42,4 +42,6 @@ Route::get('/categoriesConf', [ArticleController::class, 'getCategoriesConf'])->
 Route::get("/categorieVente", [CategorieController::class, "getCategorieVente"])->name("categorieVente.index");
 Route::get("/articlesVente", [ArticleVenteController::class, "index"])->name("articleVente.index");
 Route::post("/articlesVente", [ArticleVenteController::class, "store"])->name("articleVente.store");
-Route::delete("/articlesVente", [ArticleVenteController::class, "destroy"])->name("articleVente.destroy");
+Route::match(['put', 'patch'], '/articlesVente/{id}', [ArticleVenteController::class, 'update'])->name("articleVente.update");
+Route::delete("/articlesVente/{id}", [ArticleVenteController::class, "destroy"])->name("articleVente.destroy");
+Route::get("/articlesVente/{id}", [ArticleVenteController::class, "show"])->name("articleVente.show");
