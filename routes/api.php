@@ -44,4 +44,5 @@ Route::get("/articlesVente", [ArticleVenteController::class, "index"])->name("ar
 Route::post("/articlesVente", [ArticleVenteController::class, "store"])->name("articleVente.store");
 Route::match(['put', 'patch'], '/articlesVente/{id}', [ArticleVenteController::class, 'update'])->name("articleVente.update");
 Route::delete("/articlesVente/{id}", [ArticleVenteController::class, "destroy"])->name("articleVente.destroy");
+Route::get("/articlesVente/tailles", [ArticleVenteController::class, 'getAllTailles'])->name("articleVentes.tailles");
 Route::get("/articlesVente/{id}", [ArticleVenteController::class, "show"])->name("articleVente.show");

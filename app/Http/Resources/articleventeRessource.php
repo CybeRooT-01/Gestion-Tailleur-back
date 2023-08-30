@@ -20,21 +20,31 @@ class articleventeRessource extends JsonResource
             'id' => $this->id,
             'libelle' => $this->libelle,
             'image' => $this->image,
-            'marge'=>$this->marge,
-            'prix_vente'=>$this->prix_vente,
-            'reference'=>$this->reference,
-            'cout_fabrication'=>$this->cout_fabrication,
-            'promo'=>$this->promo,
-            'categorie'=>$this->categorie,
+            'marge' => $this->marge,
+            'prix_vente' => $this->prix_vente,
+            'reference' => $this->reference,
+            'cout_fabrication' => $this->cout_fabrication,
+            'promo' => $this->promo,
+            'categorie' => $this->categorie,
+            'tailles' => $this->whenLoaded('articleVenteTaille', function () {
+                return $this->articleVenteTaille->map(function ($articleVenteTaille) {
+                    return [
+                        'libelle' => $articleVenteTaille->taille->libelle,
+                        'quantite' => $articleVenteTaille->quantite,
+                        'id' => $articleVenteTaille->id,
+                    ];
+                });
+            }),
             'articles' => $this->whenLoaded('venteConf', function () {
-            return $this->venteConf->map(function ($articleConf) {
-                return [
-                    'libelle' => $articleConf->libelle,
-                    'quantite' => $articleConf->pivot->quantite,
-                    'id' => $articleConf->id,
-                ];
-            });
-        }),
+                return $this->venteConf->map(function ($articleConf) {
+                    return [
+                        'libelle' => $articleConf->libelle,
+                        'quantite' => $articleConf->pivot->quantite,
+                        'id' => $articleConf->id,
+                    ];
+                });
+            }),
         ];
+
     }
 }

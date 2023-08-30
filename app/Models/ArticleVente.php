@@ -27,5 +27,9 @@ class ArticleVente extends Model
     {
         return $this->belongsToMany(Article::class, 'vente_confs', 'article_vente_id', 'article_conf_id')->withPivot('quantite');
     }
+    public function articleVenteTaille()
+    {
+        return $this->hasMany(AreticleVenteTaille::class);
+    }
 
 }

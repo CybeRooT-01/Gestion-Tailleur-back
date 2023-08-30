@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\articleVenteRequest;
 use App\Http\Resources\articleventeRessource;
+use App\Models\AreticleVenteTaille;
 use App\Models\ArticleVente;
+use App\Models\taille;
 use App\Models\VenteConf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +40,7 @@ class ArticleVenteController extends Controller
             $promo = $request->promo;
             $reference = $request->reference;
             $articles = $request->article;
+            $taille = $request->tailles;
             $articlevente = ArticleVente::create([
                 'libelle' => $libelle,
                 'image' => $image,
@@ -57,6 +60,11 @@ class ArticleVenteController extends Controller
                 ];
             }
             VenteConf::insert($ListeArticle);
+
+            AreticleVenteTaille::create([
+                'article_vente_id'=> $articlevente->id,
+                'taille_id'=>$taille
+            ]);
             DB::commit();
             return response()->json(['message' => 'Article de vente enregistré avec succès'], 200);
         } catch (\Throwable $th) {
@@ -70,7 +78,7 @@ class ArticleVenteController extends Controller
      */
     public function show($id)
     {
-        $article = ArticleVente::with('venteConf')->find($id);
+        $article = ArticleVente::with('venteConf')->with('articleVenteTaille')->find($id);
         if (!$article) {
             return response()->json([
                 'message' => 'Article non trouvé'
@@ -99,7 +107,7 @@ class ArticleVenteController extends Controller
             foreach ($articles as $article) {
                 $ListeArticle[] = [
                     'article_conf_id' => $article['id'],
-                    'article_vente_id' => $id, 
+                    'article_vente_id' => $id,
                     'quantite' => $article['quantite'],
                 ];
             }
@@ -117,7 +125,7 @@ class ArticleVenteController extends Controller
      */
     public function destroy($id)
     {
-        if(!ArticleVente::find($id)){
+        if (!ArticleVente::find($id)) {
             return response()->json([
                 'message' => 'Article non trouvé'
             ], JsonResponse::HTTP_NOT_FOUND);
@@ -126,5 +134,13 @@ class ArticleVenteController extends Controller
         return response()->json([
             'message' => 'Article supprimé avec succès'
         ], JsonResponse::HTTP_OK);
+    }
+    public function getAllTailles()
+    {
+        $tailles = taille::all();
+        return response()->json([
+            'message' => 'Liste des tailles recuperes avec succes',
+            'tailles' => $tailles
+        ]);
     }
 }
