@@ -25,6 +25,7 @@ class articleVenteRequest extends FormRequest
             'libelle' => 'required|string|unique:article_ventes',
             'image' => 'required|string',
             'categorie' => 'required|integer',
+            'cout_fabrication' => 'required|integer',
         ];
     }
     public function messages(): array

@@ -17,6 +17,7 @@ class ArticleVente extends Model
         'reference',
         'image',
         'cout_fabrication',
+        'promo',
     ];
     public function categorie()
     {

@@ -41,6 +41,7 @@ class ArticleVenteController extends Controller
             $reference = $request->reference;
             $articles = $request->article;
             $taille = $request->tailles;
+            // dd($promo); me donne la valeur de promo dans le request
             $articlevente = ArticleVente::create([
                 'libelle' => $libelle,
                 'image' => $image,
@@ -48,8 +49,8 @@ class ArticleVenteController extends Controller
                 'cout_fabrication' => $cout_Fabrication,
                 'marge' => $marge,
                 'prix_vente' => $prix_vente,
-                'promo' => $promo,
                 'reference' => $reference,
+                'promo' => $promo,
             ]);
             $ListeArticle = [];
             foreach ($articles as $article) {
